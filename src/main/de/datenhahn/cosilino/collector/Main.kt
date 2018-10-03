@@ -56,7 +56,9 @@ fun main(args: Array<String>) {
     println(arguments.option("u"))
 
     val brokerUrl = arguments.option("b")
-
+    val user = arguments.option("u")
+    val pass = arguments.option("p")
+    val db = arguments.option("d")
     val client: EasyMqtt
 
     try {
@@ -67,7 +69,7 @@ fun main(args: Array<String>) {
             client = EasyMqtt()
         }
 
-        Database.connect("jdbc:mysql://127.0.0.1:3306/cosilino", user = "root", driver = "org.mariadb.jdbc.Driver")
+        Database.connect(url = db!!, user = user!!, password = pass!!, driver = "org.mariadb.jdbc.Driver")
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
 
         transaction {
@@ -83,7 +85,7 @@ fun main(args: Array<String>) {
                         it[roomHum] = BigDecimal.valueOf(parsed.double("roomHum")!!)
                         it[roomTemp] = BigDecimal.valueOf(parsed.double("roomTemp")!!)
                         it[heaterTemp] = BigDecimal.valueOf(parsed.double("heaterTemp")!!)
-                        it[heaterPower] = parsed.int("roomTemp")!!
+                        it[heaterPower] = parsed.int("heaterPower")!!
                         it[timestamp] = DateTime.now()
                     }
                 }
